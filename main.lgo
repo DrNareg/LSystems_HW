@@ -1,0 +1,71 @@
+to go
+    clean
+    clear
+    setcolor 'green'
+    setps 1.5
+    setheading 0
+    pendown
+    let "state se heading se xcor ycor
+    let "stack push [ ] :state
+
+    let "s [ F - G - G ]
+    let "res rewrite (rewrite (rewrite (rewrite :s)))
+    
+    draw :res :stack
+end
+
+to draw :actions :stack    
+    if (count :actions) = 0 [stop]
+    let "head nth 0 :actions
+    let "newstack act :head :stack
+    draw (butfirst :actions) :newstack
+end
+
+to act :action :stack
+    if :action = 'F' [ forward 10 ]
+    if :action = 'G' [ forward 10 ]
+    if :action = '+' [ left 120 ]
+    if :action = '-' [ right 120 ]
+    
+    let "state se heading se xcor ycor    
+    if :action = '(' [ output push :stack :state ]
+    
+    if :action = ')' [ update :stack]
+    if :action = ')' [ output pop :stack ]    
+
+    output :stack
+end
+
+to update :stack    
+    penup
+    let "h nth 0 :stack
+    let "x nth 1 :stack
+    let "y nth 2 :stack
+    setheading :h
+    setxy :x :y
+    pendown
+end
+
+to rewrite :sentence         
+    let "head nth 0 :sentence    
+    let "o rule :head    
+    if (count :sentence) = 1 [output :o]
+    let "tail rewrite (butfirst :sentence)        
+    output se :o :tail
+end
+
+to rule :symbol
+    let "Frhs [F - G + F + G - F]   
+    let "Grhs [G G]
+    if :symbol = 'F' [ output :Frhs ] 
+    if :symbol = 'G' [ output :Grhs ]
+    output :symbol    
+end
+
+to push :stack :state
+    output se :state :stack
+end
+
+to pop :stack
+    output butfirst (butfirst (butfirst :stack))
+end
