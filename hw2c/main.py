@@ -89,11 +89,15 @@ def print_cyk(String, Grammer):
     else:
         print("NO")
 
+# Get user input for their file paths
+grammartext = input("Please enter the path to your grammar file: ")
+stringtext = input("Please enter the path to your string file: ")
 
-NumOfNotations, Grammer = read_grammar_file('/workspaces/LSystems_HW2a/hw2c/grammar.txt')
-String = read_string_file('/workspaces/LSystems_HW2a/hw2c/string.txt')
+# Collect all the important info
+NumOfNotations, Grammer = read_grammar_file(grammartext)
+String = read_string_file(stringtext)
 
-
+# Check if string in grammar
 if check_grammer(Grammer):
     print_cyk(String, Grammer)
 else:
