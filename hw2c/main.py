@@ -1,3 +1,4 @@
+# Extract all the important info from the grammar and string files
 def read_grammar_file(filename):
     with open(filename, "r") as file:
         lines = file.read().strip().split(";")  # Split rules using semicolon
@@ -5,16 +6,15 @@ def read_grammar_file(filename):
     Grammer = [line.strip().split(" -> ") for line in lines if "->" in line]  # Parse rules
     NumOfNotations = len(Grammer)  # Count the number of grammar rules
 
-    print("Notations:", NumOfNotations)
-    print("Grammar:", Grammer)
     return NumOfNotations, Grammer
 
 def read_string_file(filename):
     with open(filename, "r") as file:
         String = file.readline().strip()  # Read the single-line string
-    print("String:", String)
+        
     return String
 
+# Check the grammar rules to make sure they follow the correct format and all variables are defined
 def check_grammer(Grammer):
     Variables = {}
     for Notation in Grammer:
@@ -37,7 +37,7 @@ def check_grammer(Grammer):
             return False
     return True
 
-
+# CYK algorithm implementation
 def cyk(String, Computed=None, Grammer=None):
     if Computed is None:
         Computed = {}  # Initialize if not provided
@@ -72,12 +72,11 @@ def cyk(String, Computed=None, Grammer=None):
                 "'", "").replace(" ", "")
             return Computed
 
-
-
+# Prints 0 if the string can be parsed by the grammar, otherwise prints 1, along with the parse details.
 def print_cyk(String, Grammer):
     result = cyk(String, {}, Grammer)
     if result[String] != "[]" and "S" in result[String]:
-        print("YES")
+        print(0)
         for i in range(1, len(String)+1):
             for j in range(len(String) - i):
                 if String[j:j+i] in result:
@@ -87,7 +86,7 @@ def print_cyk(String, Grammer):
                     print(String[j:j+i]+" : "+"[]"+" , ", end="")
             print(String[-i:], " : "+result[String[-i:]])
     else:
-        print("NO")
+        print(1)
 
 # Get user input for their file paths
 grammartext = input("Please enter the path to your grammar file: ")
@@ -101,4 +100,4 @@ String = read_string_file(stringtext)
 if check_grammer(Grammer):
     print_cyk(String, Grammer)
 else:
-    print("Wrong Grammar")
+    print("Invalid Grammar")
